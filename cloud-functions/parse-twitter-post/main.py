@@ -27,4 +27,3 @@ def parse_twitter_post(request):
         return str(response)
     else:
         return 'Missing post url!'
-
