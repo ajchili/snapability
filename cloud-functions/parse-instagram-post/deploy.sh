@@ -1,0 +1,1 @@
+gcloud functions deploy parse_instagram_post --runtime python37 --trigger-http
