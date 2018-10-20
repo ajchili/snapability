@@ -1,0 +1,1 @@
+gcloud functions deploy cors_enabled_function --runtime python37 --trigger-http
