@@ -1,0 +1,22 @@
+{
+  "name": "snapability-hello-world",
+  "version": "0.1.0",
+  "description": "Basic hello world API endpoint.",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "deploy": "gcloud functions deploy helloWorld --runtime nodejs8 --trigger-http",
+    "describe": "gcloud functions describe helloWorld",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajchili/snapability.git"
+  },
+  "author": "Kirin Patel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ajchili/snapability/issues"
+  },
+  "homepage": "https://github.com/ajchili/snapability#readme"
+}
