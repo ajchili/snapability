@@ -1,4 +1,4 @@
-# parse-twitter-post
+# parse_twitter_post
 
 ## Deployment
 Deploys API endpoint to GCP.
