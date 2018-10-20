@@ -18,8 +18,13 @@ def parse_twitter_post(request):
     if post is not None:
         r = requests.get(post)
         soup = BeautifulSoup(r.text, 'html.parser')
-        results = soup.find_all('img')
-        return str(results)
+        results = soup.find_all('div', {'class': 'AdaptiveMedia-photoContainer'})
+        image = results[0].find('img')
+        response = {
+            'tweet': post,
+            'src': image['src']
+        }
+        return str(response)
     else:
         return 'Missing post url!'
 
