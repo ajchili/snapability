@@ -62,19 +62,19 @@ class Stats extends Component {
       });
     }
 
-    let usagePerMinuteHistory = 5;
+    let historyLength = 7;
     let usagePerMinute = [
       {
         name: "Twitter",
-        data: new Array(usagePerMinuteHistory).fill(0)
+        data: new Array(historyLength).fill(0)
       },
       {
         name: "Tumblr",
-        data: new Array(usagePerMinuteHistory).fill(0)
+        data: new Array(historyLength).fill(0)
       },
       {
         name: "Instagram",
-        data: new Array(usagePerMinuteHistory).fill(0)
+        data: new Array(historyLength).fill(0)
       }
     ];
     if (this.state.postStatistics) {
@@ -82,7 +82,7 @@ class Stats extends Component {
         let usage = Math.floor(
           (new Date().getTime() - statistic.time) / 1000 / 60
         );
-        if (usage <= usagePerMinuteHistory - 1) {
+        if (usage <= historyLength - 1) {
           switch (statistic.type) {
             case "twitter":
               if (!usagePerMinute[0].data[usage])
@@ -119,7 +119,7 @@ class Stats extends Component {
         width: 7,
         curve: "smooth"
       },
-      labels: Array.apply(null, { length: usagePerMinuteHistory })
+      labels: Array.apply(null, { length: historyLength })
         .map(Number.call, Number)
         .map(index => index + 1)
         .reverse(),
@@ -226,7 +226,7 @@ class Stats extends Component {
                     <CardContent>
                       <Typography variant="display1">
                         All requests made within the past{" "}
-                        {usagePerMinuteHistory} minutes
+                        {historyLength} minutes
                       </Typography>
                     </CardContent>
                   </Card>
