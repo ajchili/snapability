@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import Home from "./components/Home";
 import Post from "./components/Post";
+import Stats from "./components/Stats";
 
 class App extends Component {
   render() {
@@ -14,6 +15,7 @@ class App extends Component {
           <Route exact path="/" component={Home} />
           <Route exact path="/post" component={Post} />
           <Route path="/post/:type" component={Post} />
+          <Route exact path="/stats" component={Stats} />
         </div>
       </Router>
     );
