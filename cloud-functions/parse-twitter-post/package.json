@@ -1,0 +1,24 @@
+{
+  "name": "snapability-parse-twitter-post",
+  "version": "0.1.0",
+  "description": "## Deployment Deploys API endpoint to GCP.",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "gcloud functions deploy parseTwitterPost --runtime nodejs8 --trigger-http",
+    "describe": "gcloud functions describe parseTwitterPost",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajchili/snapability.git"
+  },
+  "author": "Kirin Patel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ajchili/snapability/issues"
+  },
+  "homepage": "https://github.com/ajchili/snapability#readme",
+  "dependencies": {
+    "axios": "^0.18.0"
+  }
+}

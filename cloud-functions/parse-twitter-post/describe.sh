@@ -1,1 +1,0 @@
-gcloud functions describe parse_twitter_post
