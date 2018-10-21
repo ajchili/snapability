@@ -1,5 +1,30 @@
 const Clarifai = require('clarifai');
 const cors = require('cors')({ origin: true });
+const Datastore = require('@google-cloud/datastore');
+
+const projectId = 'snapability-220017';
+
+const saveToDataStore = data => {
+  const datastore = new Datastore({
+    projectId
+  });
+  
+  const kind = 'Predict';
+  const predictKey = datastore.key(kind);
+  
+  const predict = {
+    key: predictKey,
+    data: {
+      time: new Date().getTime(),
+      ...data
+    },
+  };
+  
+  datastore
+    .save(predict)
+    .then(() => console.log(`Saved ${predict.key.name}: ${predict.data.description}`))
+    .catch(err => console.error('ERROR:', err));
+};
 
 exports.predictImage = (req, res) => {
   cors(req, res, () => {
@@ -19,6 +44,10 @@ exports.predictImage = (req, res) => {
         .then(response => {
           let concepts = response['outputs'][0]['data']['concepts'];
           res.status(200).json(concepts);
+          saveToDataStore({
+            url: req.body.url,
+            concepts
+          });
         })
         .catch(err => {
           console.error(`Error parsing ${req.body.url}`, err);
