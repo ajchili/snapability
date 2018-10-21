@@ -4,7 +4,6 @@ import {
   Button,
   Grid,
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
@@ -116,18 +115,43 @@ export default class extends Component {
                   <Typography variant="caption">
                     <a href={url} target="_blank">Original Post</a>
                   </Typography>
-                  {this.state.content && this.state.content.map(content => {
-                    return (
-                      <Chip label={content.name} variant="outlined" />
-                    );
-                  })}
+                  {this.state.content && 
+                    <Grid
+                      container
+                      direction="row"
+                      justify="flex-start"
+                      alignItems="center"
+                      spacing={8}
+                      style={{
+                        marginTop: '5px'
+                      }}
+                    >
+                      {this.state.content
+                        .map(content => {
+                          return (
+                            <Grid
+                              item
+                              key={content.name}
+                            >
+                              {content.value >= .9 &&
+                                <Chip label={content.name} variant="outlined" color="primary"/>
+                              }
+                              {content.value < .9 && content.value >= .7 &&
+                                <Chip label={content.name} variant="outlined" color="secondary"/>
+                              }
+                              {content.value < .7 &&
+                                <Chip label={content.name} variant="outlined"/>
+                              }
+                            </Grid>
+                          );
+                        })
+                      }
+                    </Grid>
+                  }
                 </CardContent>
                 <CardActions>
                   <Button size="small" color="primary">
                     Share
-                  </Button>
-                  <Button size="small" color="primary">
-                    Learn More
                   </Button>
                 </CardActions>
               </Card>
