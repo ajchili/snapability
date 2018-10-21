@@ -13,6 +13,11 @@ import {
 import { withRouter } from "react-router-dom";
 
 const demo = [
+  "https://twitter.com/LinusTech/status/1053731363373764608",
+  "https://twitter.com/BOOSTLINKS/status/1053830378006315008",
+  "https://twitter.com/BOOSTLINKS/status/1053826688822341633",
+  "https://twitter.com/BOOSTLINKS/status/1053836520132657152",
+  "https://twitter.com/seanallen_dev/status/1053871956682932226",
   "https://www.instagram.com/p/BoKXMzqA5rm",
   "https://www.instagram.com/p/Bo2WOtAHRl_/",
   "https://www.instagram.com/p/BpKZxqsnZHA/",
