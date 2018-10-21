@@ -148,6 +148,7 @@ export default class extends Component {
           } else {
             return (<Redirect to="/" />);
           }
+          break;
         default:
           break;
       }
