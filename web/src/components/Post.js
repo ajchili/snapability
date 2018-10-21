@@ -14,7 +14,8 @@ import {
 import { Redirect } from 'react-router-dom';
 
 const allowedTypes = [
-  'twitter'
+  'twitter',
+  'tumblr'
 ];
 
 export default class extends Component {
@@ -46,6 +47,31 @@ export default class extends Component {
       });
   }
 
+  _fetchPost = (username, postId) => {
+    if (this.state.err || this.state.post) return;
+    
+    axios({
+      method: 'POST',
+      url: 'https://us-central1-snapability-220017.cloudfunctions.net/parseTumblrPost',
+      data: {
+        username,
+        postId
+      }
+    })
+      .then(res => {
+        console.log(res);
+        this.setState({
+          post: res.data
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        this.setState({
+          err: 'Error parsing tumblr post.'
+        });
+      });
+  }
+
   _fetchContent = url => {
     if (this.state.content) return;
 
@@ -64,27 +90,49 @@ export default class extends Component {
       .catch(err => console.error(err));
   }
 
+  _load = (type, url) => {
+    let author, status, username, postId;
+
+    switch (type) {
+      case 'twitter':
+        author = this.props.location.search.split('author=')[1];
+        status = this.props.location.search.split('status=')[1];
+        if (author && status) {
+          url = `https://twitter.com/${author.split('&')[0]}/status/${status}`;
+          this._fetchTweet(url);
+        } else {
+          return (<Redirect to="/" />);
+        }
+        break;
+      case 'tumblr':
+        username = this.props.location.search.split('author=')[1];
+        postId = this.props.location.search.split('post=')[1];
+        console.log(username, postId)
+        if (username && postId) {
+          this._fetchPost(username.split('&')[0], postId);
+        } else {
+          return (<Redirect to="/" />);
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
   render() {
     let type = this.props.match.params.type;
     let url = null;
     if (!allowedTypes.includes(type)) type = null;
-    else {
-      switch (type) {
-        case 'twitter':
-          let author = this.props.location.search.split('author=')[1];
-          let status = this.props.location.search.split('status=')[1];
-          if (author && status) {
-            url = `https://twitter.com/${author.split('&')[0]}/status/${status}`;
-            this._fetchTweet(url)
-          }
-          break;
-        default:
-          break;
-      }
-    }
+    else this._load(type, url);
 
     if (!!this.state.post) {
-      this._fetchContent(this.state.post.src);
+      if (type !== 'tumblr') {
+        this._fetchContent(this.state.post.src);
+      } else {
+        this.state.post.forEach(src => {
+          this._fetchContent(src);
+        });
+      }
     }
 
     return (
@@ -103,7 +151,7 @@ export default class extends Component {
               <Card>
                 {this.state.post ? (
                   <CardMedia
-                    image={this.state.post.src}
+                    image={type !== 'tumblr' ? this.state.post.src : this.state.post[0]}
                     title={`${type} post provided by user`}
                     style={{
                       height: '400px',

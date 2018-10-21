@@ -22,6 +22,8 @@ class Home extends Component {
     this.setState({ post: e.target.value });
     if (e.target.value.includes('twitter')) {
       this.setState({ platform: 'twitter' });
+    } else if (e.target.value.includes('tumblr')) {
+      this.setState({ platform: 'tumblr' });
     } else if (!e.target.value.length) {
       this.setState({ platform: '' });
     }
@@ -33,14 +35,21 @@ class Home extends Component {
 
   onLoadPost = () => {
     const { post, platform } = this.state;
+    let author, status, _post;
 
     if (!post.length || !platform.length) alert("A url and platform are required!");
     else {
       switch (platform) {
         case "twitter":
-          let author = post.split('com/')[1].split('/')[0];
-          let status = post.split('status/')[1];
+          author = post.split('com/')[1].split('/')[0];
+          status = post.split('status/')[1];
           this.props.history.push(`/post/twitter?author=${author}&?status=${status}`);
+          break;
+        case "tumblr":
+          author = post.split("://")[1].split("/")[0];
+          _post = post.split("post/")[1];
+          if (_post.includes('/')) _post = _post.split('/')[0];
+          this.props.history.push(`/post/tumblr?author=${author}&?post=${_post}`);
           break;
         default:
           alert('The platform selected is currently unsupported.');
