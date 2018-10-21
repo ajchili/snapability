@@ -93,6 +93,18 @@ class Home extends Component {
         <Button
           style={{
             top: 5,
+            left: 5,
+            position: "absolute"
+          }}
+          variant="text"
+          color="primary"
+          onClick={() => this.props.history.push('/stats')}
+        >
+          Statistics
+        </Button>
+        <Button
+          style={{
+            top: 5,
             right: 5,
             position: "absolute"
           }}
