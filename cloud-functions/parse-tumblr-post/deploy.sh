@@ -1,1 +1,0 @@
-gcloud functions deploy parse_tumblr_post --runtime python37 --trigger-http
