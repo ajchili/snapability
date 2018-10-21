@@ -19,7 +19,6 @@ const demo = [
   "https://www.instagram.com/p/BpHuBMrh-m9/",
   "https://www.instagram.com/p/BpMNLgxnuSf/?tagged=exploration",
   "https://ramibains.tumblr.com/post/172413087381/porsche",
-  "https://jimhenson-themuppetmaster.tumblr.com/post/178730125187/kermit-the-frog-the-great-muppet-caper",
   "https://coolcatgroup.tumblr.com/post/179264527036/theawkwardjossy-i-think-we-can-all-agree-chubs",
   "http://krabby-kronicle.tumblr.com/post/168440292876",
   "http://astalavistasta.tumblr.com/post/175234498819/%C3%B6zg%C3%BCrl%C3%BC%C4%9F%C3%BCn-en-b%C3%BCy%C3%BCk-d%C3%BC%C5%9Fman%C4%B1-halinden-memnun-olan",
