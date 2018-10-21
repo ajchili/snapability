@@ -62,7 +62,7 @@ class Stats extends Component {
       });
     }
 
-    let historyLength = 7;
+    let historyLength = 10;
     let usagePerMinute = [
       {
         name: "Twitter",
