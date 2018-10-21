@@ -14,9 +14,11 @@ const saveToDataStore = data => {
   
   const parse = {
     key: parseKey,
-    type: 'twitter',
-    data,
-    time: new Date().getTime()
+    data: {
+      type: 'twitter',
+      time: new Date().getTime(),
+      ...data
+    },
   };
   
   datastore

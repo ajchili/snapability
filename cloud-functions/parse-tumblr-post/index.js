@@ -15,9 +15,11 @@ const saveToDataStore = data => {
   
   const parse = {
     key: parseKey,
-    type: 'tumblr',
-    data,
-    time: new Date().getTime()
+    data: {
+      type: 'tumblr',
+      time: new Date().getTime(),
+      ...data
+    },
   };
   
   datastore
