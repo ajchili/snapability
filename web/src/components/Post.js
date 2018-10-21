@@ -90,40 +90,38 @@ export default class extends Component {
       .catch(err => console.error(err));
   }
 
-  _load = (type, url) => {
-    let author, status, username, postId;
-
-    switch (type) {
-      case 'twitter':
-        author = this.props.location.search.split('author=')[1];
-        status = this.props.location.search.split('status=')[1];
-        if (author && status) {
-          url = `https://twitter.com/${author.split('&')[0]}/status/${status}`;
-          this._fetchTweet(url);
-        } else {
-          return (<Redirect to="/" />);
-        }
-        break;
-      case 'tumblr':
-        username = this.props.location.search.split('author=')[1];
-        postId = this.props.location.search.split('post=')[1];
-        console.log(username, postId)
-        if (username && postId) {
-          this._fetchPost(username.split('&')[0], postId);
-        } else {
-          return (<Redirect to="/" />);
-        }
-        break;
-      default:
-        break;
-    }
-  }
-
   render() {
     let type = this.props.match.params.type;
     let url = null;
     if (!allowedTypes.includes(type)) type = null;
-    else this._load(type, url);
+    else {
+      let author, status, username, postId;
+
+      switch (type) {
+        case 'twitter':
+          author = this.props.location.search.split('author=')[1];
+          status = this.props.location.search.split('status=')[1];
+          if (author && status) {
+            url = `https://twitter.com/${author.split('&')[0]}/status/${status}`;
+            this._fetchTweet(url);
+          } else {
+            return (<Redirect to="/" />);
+          }
+          break;
+        case 'tumblr':
+          username = this.props.location.search.split('author=')[1].split('&')[0];
+          postId = this.props.location.search.split('post=')[1];
+          url = `https://${username}/post/${postId}`
+          if (username && postId) {
+            this._fetchPost(username, postId);
+          } else {
+            return (<Redirect to="/" />);
+          }
+          break;
+        default:
+          break;
+      }
+    }
 
     if (!!this.state.post) {
       if (type !== 'tumblr') {
