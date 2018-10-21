@@ -58,15 +58,16 @@ class Stats extends Component {
       })
     }
 
+    let usagePerMinuteHistory = 5;
     let usagePerMinute = [{
       name: 'Twitter',
-      data: [null, null, null, null, null, null, null, null, null, null]
+      data: new Array(usagePerMinuteHistory).fill(0)
     }, {
       name: 'Tumblr',
-      data: [null, null, null, null, null, null, null, null, null, null]
+      data: new Array(usagePerMinuteHistory).fill(0)
     }, {
       name: 'Instagram',
-      data: [null, null, null, null, null, null, null, null, null, null]
+      data: new Array(usagePerMinuteHistory).fill(0)
     }];
     if (this.state.statistics) {
       this.state.statistics.forEach(statistic => {
@@ -74,19 +75,19 @@ class Stats extends Component {
         console.log(usage);
         switch (statistic.type) {
           case "twitter":
-            if (usage <= 9) {
+            if (usage <= usagePerMinuteHistory - 1) {
               if (!usagePerMinute[0].data[usage]) usagePerMinute[0].data[usage] = 0; 
               usagePerMinute[0].data[usage]++;
             }
             break;
           case "tumblr":
-            if (usage <= 9) {
+            if (usage <= usagePerMinuteHistory - 1) {
               if (!usagePerMinute[1].data[usage]) usagePerMinute[1].data[usage] = 0; 
               usagePerMinute[1].data[usage]++;
             }
             break;
           case "instagram":
-            if (usage <= 9) {
+            if (usage <= usagePerMinuteHistory - 1) {
               if (!usagePerMinute[2].data[usage]) usagePerMinute[2].data[usage] = 0; 
               usagePerMinute[2].data[usage]++;
             }
@@ -99,8 +100,7 @@ class Stats extends Component {
       usagePerMinute[2].data.reverse();
     }
 
-
-    let abc = {
+    let usagePerMinuteOptions = {
       chart: {
         type: 'line',
         zoom: {
@@ -108,22 +108,35 @@ class Stats extends Component {
         },
       },
       stroke: {
-        width: [5,5,4],
-        curve: 'straight'
+        width: 7,   
+        curve: 'smooth'
       },
-      labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].reverse(),
+      labels: Array.apply(null, {length: usagePerMinuteHistory})
+        .map(Number.call, Number)
+        .map(index => index + 1)
+        .reverse(),
       fill: {
         type: 'gradient',
         gradient: {
             shade: 'dark',
-            gradientToColors: [ '#FDD835'],
+            gradientToColors: [ '#787878', '#787878', '#787878' ],
             shadeIntensity: 1,
             type: 'horizontal',
             opacityFrom: 1,
             opacityTo: 1,
             stops: [0, 100, 100, 100]
+        }
+      },
+      xaxis: {
+        title: {
+          text: "Minute(s) ago",
         },
       },
+      yaxis: {
+        title: {
+          text: "Number of requests made",
+        },
+      }
     }
 
     return (
@@ -165,7 +178,7 @@ class Stats extends Component {
               <Grid item>
                 <Card>
                   <div className="donut">
-                    <Chart options={{labels: ['Twitter', 'Tumblr', 'Instagram']}} series={totalPlatformUsage} type="donut" />
+                    <Chart options={{dataLabels: { enabled: false }, labels: ['Twitter', 'Tumblr', 'Instagram']}} series={totalPlatformUsage} type="donut" />
                   </div>
                   <CardContent>
                     <Typography variant="display1">
@@ -177,11 +190,11 @@ class Stats extends Component {
               <Grid item>
                 <Card>
                   <div className="line">
-                    <Chart options={abc} series={usagePerMinute} type="line" />
+                    <Chart options={usagePerMinuteOptions} series={usagePerMinute} type="line" />
                   </div>
                   <CardContent>
                     <Typography variant="display1">
-                      All requests made within the past 10 minutes
+                      All requests made within the past {usagePerMinuteHistory} minutes
                     </Typography>
                   </CardContent>
                 </Card>
