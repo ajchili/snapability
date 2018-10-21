@@ -13,15 +13,13 @@ export default class extends Component {
   _fetchTweet = url => {
     axios({
       method: 'POST',
-      url: 'https://us-central1-snapability-220017.cloudfunctions.net/parse_twitter_post',
+      url: 'https://us-central1-snapability-220017.cloudfunctions.net/parseTwitterPost',
       data: {
         url
       }
     })
       .then(res => {
-        this.setState({
-          post: res.data
-        });
+        console.log(res.data);
       })
       .catch(err => {
 
