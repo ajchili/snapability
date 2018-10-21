@@ -1,25 +1,25 @@
 {
-  "name": "snapability-predict-image",
+  "name": "snapability-parse-tumblr-post",
   "version": "0.1.0",
-  "description": "API endpoint to interface with Clarifai's Image Prediction API.",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy": "gcloud beta functions deploy predictImage --env-vars-file .env.yaml --runtime nodejs8 --trigger-http",
-    "describe": "gcloud functions describe predictImage",
+    "deploy": "gcloud beta functions deploy parseTumblrPost --env-vars-file .env.yaml --runtime nodejs8 --trigger-http",
+    "describe": "gcloud functions describe parseTumblrPost",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ajchili/snapability.git"
   },
-  "author": "Kirin Patel",
+  "author": "elijahcutler",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ajchili/snapability/issues"
   },
   "homepage": "https://github.com/ajchili/snapability#readme",
   "dependencies": {
-    "clarifai": "^2.9.0",
-    "cors": "^2.8.4"
+    "cors": "^2.8.4",
+    "tumblr.js": "^2.0.0"
   }
 }
