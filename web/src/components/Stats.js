@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
 import Chart from "react-apexcharts";
+import d3 from "d3";
 
 class Stats extends Component {
   state = {
