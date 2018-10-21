@@ -8,9 +8,12 @@ const allowedTypes = [
 export default class extends Component {
   state = {
     post: null,
+    err: null,
   };
 
   _fetchTweet = url => {
+    if (this.state.err || this.state.post) return;
+
     axios({
       method: 'POST',
       url: 'https://us-central1-snapability-220017.cloudfunctions.net/parseTwitterPost',
@@ -19,10 +22,14 @@ export default class extends Component {
       }
     })
       .then(res => {
-        console.log(res.data);
+        this.setState({
+          post: res.data
+        });
       })
-      .catch(err => {
-
+      .catch(() => {
+        this.setState({
+          err: 'Error parsing tweet.'
+        });
       });
   }
 
