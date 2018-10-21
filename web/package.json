@@ -17,9 +17,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -30,7 +28,7 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "homepage": "http://ajchili.github.io/snapability",
+  "homepage": "https://snapability-220017.firebaseapp.com/",
   "devDependencies": {
     "gh-pages": "^2.0.1"
   }
