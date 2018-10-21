@@ -41,7 +41,7 @@ exports.parseTwitterPost = (req, res) => {
             src: tweetURL
           });
           saveToDataStore({
-            tweet: req.body.url,
+            url: req.body.url,
             src: tweetURL,
             author: req.body.url.split('https://twitter.com/')[1].split('/')[0],
             post: req.body.url.split('status/')[1],
