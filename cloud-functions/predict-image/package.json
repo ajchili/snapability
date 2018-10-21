@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ajchili/snapability#readme",
   "dependencies": {
-    "clarifai": "^2.9.0"
+    "clarifai": "^2.9.0",
+    "cors": "^2.8.4"
   }
 }
