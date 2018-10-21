@@ -1,8 +1,19 @@
 from bs4 import BeautifulSoup
 import json
+import flask
 import requests
 
 def parse_twitter_post(request):
+    if request.method == 'OPTIONS':
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS, POST',
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Max-Age': '3600'
+        }
+
+        return ('', 204, headers)
+    
     content_type = request.headers['content-type']
     if content_type == 'application/json':
         post = request.json.get('post')
@@ -20,10 +31,13 @@ def parse_twitter_post(request):
         soup = BeautifulSoup(r.text, 'html.parser')
         results = soup.find_all('div', {'class': 'AdaptiveMedia-photoContainer'})
         image = results[0].find('img')
-        response = {
+        response = flask.jsonify({
             'tweet': post,
             'src': image['src']
-        }
-        return str(response)
+        })
+        response.headers.set('Access-Control-Allow-Origin', '*')
+        response.headers.set('Access-Control-Allow-Methods', 'OPTIONS, POST')
+        response.headers.set('Access-Control-Allow-Headers', '*')
+        return response
     else:
         return 'Missing post url!'
