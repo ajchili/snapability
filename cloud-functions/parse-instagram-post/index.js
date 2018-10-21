@@ -1,5 +1,31 @@
 const axios = require("axios");
 const cors = require("cors")({ origin: true });
+const Datastore = require('@google-cloud/datastore');
+
+const projectId = 'snapability-220017';
+
+const saveToDataStore = data => {
+  const datastore = new Datastore({
+    projectId
+  });
+  
+  const kind = 'Parse';
+  const parseKey = datastore.key(kind);
+  
+  const parse = {
+    key: parseKey,
+    data: {
+      type: 'instagram',
+      time: new Date().getTime(),
+      ...data
+    },
+  };
+  
+  datastore
+    .save(parse)
+    .then(() => console.log(`Saved ${parse.key.name}: ${parse.data.description}`))
+    .catch(err => console.error('ERROR:', err));
+};
 
 exports.parseInstagramPost = (req, res) => {
   cors(req, res, () => {
@@ -17,6 +43,10 @@ exports.parseInstagramPost = (req, res) => {
             .split('"')[0];
           res.status(200).json({
             post: req.body.url,
+            src
+          });
+          saveToDataStore({
+            url: req.body.url,
             src
           });
         })
