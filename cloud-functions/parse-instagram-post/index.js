@@ -42,7 +42,8 @@ exports.parseInstagramPost = (req, res) => {
             .split('<meta property="og:image" content="')[1]
             .split('"')[0];
           res.status(200).json({
-            post: req.body.url,
+            url: req.body.url,
+            post: req.body.url.split('/p/')[1],
             src
           });
           saveToDataStore({
