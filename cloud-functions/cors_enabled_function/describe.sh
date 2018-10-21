@@ -1,1 +1,0 @@
-gcloud functions describe cors_enabled_function
