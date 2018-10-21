@@ -1,6 +1,30 @@
 // Authenticate via API Key
 const tumblr = require("tumblr.js");
 const cors = require("cors")({ origin: true });
+const Datastore = require('@google-cloud/datastore');
+
+const projectId = 'snapability-220017';
+
+const saveToDataStore = data => {
+  const datastore = new Datastore({
+    projectId
+  });
+  
+  const kind = 'Parse';
+  const parseKey = datastore.key(kind);
+  
+  const parse = {
+    key: parseKey,
+    type: 'tumblr',
+    data,
+    time: new Date().getTime()
+  };
+  
+  datastore
+    .save(parse)
+    .then(() => console.log(`Saved ${parse.key.name}: ${parse.data.description}`))
+    .catch(err => console.error('ERROR:', err));
+};
 
 exports.parseTumblrPost = (req, res) => {
   cors(req, res, () => {
@@ -27,6 +51,14 @@ exports.parseTumblrPost = (req, res) => {
               return photo.original_size.url;
             })
           );
+          saveToDataStore({
+            url: req.body.url,
+            srcs: data.posts[0].photos.map(photo => {
+              return photo.original_size.url;
+            }),
+            author: req.body.username,
+            post: req.body.postId,
+          });
         }
       });
     }
