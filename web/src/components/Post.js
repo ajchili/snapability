@@ -10,12 +10,10 @@ import {
   CircularProgress,
   Chip,
   Typography
-} from '@material-ui/core';
-import { Redirect } from 'react-router-dom';
+} from "@material-ui/core";
+import { Redirect } from "react-router-dom";
 
-const allowedTypes = [
-  'twitter'
-];
+const allowedTypes = ["twitter"];
 
 export default class extends Component {
   state = {
@@ -28,8 +26,9 @@ export default class extends Component {
     if (this.state.err || this.state.post) return;
 
     axios({
-      method: 'POST',
-      url: 'https://us-central1-snapability-220017.cloudfunctions.net/parseTwitterPost',
+      method: "POST",
+      url:
+        "https://us-central1-snapability-220017.cloudfunctions.net/parseTwitterPost",
       data: {
         url
       }
@@ -41,17 +40,18 @@ export default class extends Component {
       })
       .catch(() => {
         this.setState({
-          err: 'Error parsing tweet.'
+          err: "Error parsing tweet."
         });
       });
-  }
+  };
 
   _fetchContent = url => {
     if (this.state.content) return;
 
     axios({
-      method: 'POST',
-      url: 'https://us-central1-snapability-220017.cloudfunctions.net/predictImage',
+      method: "POST",
+      url:
+        "https://us-central1-snapability-220017.cloudfunctions.net/predictImage",
       data: {
         url
       }
@@ -62,7 +62,7 @@ export default class extends Component {
         });
       })
       .catch(err => console.error(err));
-  }
+  };
 
   render() {
     let type = this.props.match.params.type;
@@ -70,12 +70,14 @@ export default class extends Component {
     if (!allowedTypes.includes(type)) type = null;
     else {
       switch (type) {
-        case 'twitter':
-          let author = this.props.location.search.split('author=')[1];
-          let status = this.props.location.search.split('status=')[1];
+        case "twitter":
+          let author = this.props.location.search.split("author=")[1];
+          let status = this.props.location.search.split("status=")[1];
           if (author && status) {
-            url = `https://twitter.com/${author.split('&')[0]}/status/${status}`;
-            this._fetchTweet(url)
+            url = `https://twitter.com/${
+              author.split("&")[0]
+            }/status/${status}`;
+            this._fetchTweet(url);
           }
           break;
         default:
@@ -99,8 +101,9 @@ export default class extends Component {
       >
         {type ? (
           <Grid item m={4} xs={4} sm={4}>
-            {this.state.post && 
+            {this.state.post && (
               <Card>
+<<<<<<< Updated upstream
                 {this.state.post ? (
                   <CardMedia
                     image={this.state.post.src}
@@ -131,11 +134,31 @@ export default class extends Component {
                     </Grid>
                   </Grid>
                 )}
+=======
+                <CardMedia
+                  image={this.state.post.src}
+                  title="Contemplative Reptile"
+                  style={{
+                    height: "400px",
+                    width: "100%"
+                  }}
+                />
+>>>>>>> Stashed changes
                 <CardContent>
                   <Typography gutterBottom variant="headline" component="h2">
-                    {type.substring(0, 1).toUpperCase()}{type.substring(1)} Post
+                    {type.substring(0, 1).toUpperCase()}
+                    {type.substring(1)} Post
                   </Typography>
+<<<<<<< Updated upstream
                   {this.state.content ? (
+=======
+                  <Typography variant="caption">
+                    <a href={url} target="_blank" rel="noopener noreferrer">
+                      Original Post
+                    </a>
+                  </Typography>
+                  {this.state.content && (
+>>>>>>> Stashed changes
                     <Grid
                       container
                       direction="row"
@@ -143,9 +166,10 @@ export default class extends Component {
                       alignItems="center"
                       spacing={8}
                       style={{
-                        marginTop: '5px'
+                        marginTop: "5px"
                       }}
                     >
+<<<<<<< Updated upstream
                       {this.state.content
                         .map(content => {
                           return (
@@ -189,6 +213,34 @@ export default class extends Component {
                       </Grid>
                     )
                   }
+=======
+                      {this.state.content.map(content => {
+                        return (
+                          <Grid item key={content.name}>
+                            {content.value >= 0.9 && (
+                              <Chip
+                                label={content.name}
+                                variant="outlined"
+                                color="primary"
+                              />
+                            )}
+                            {content.value < 0.9 &&
+                              content.value >= 0.7 && (
+                                <Chip
+                                  label={content.name}
+                                  variant="outlined"
+                                  color="secondary"
+                                />
+                              )}
+                            {content.value < 0.7 && (
+                              <Chip label={content.name} variant="outlined" />
+                            )}
+                          </Grid>
+                        );
+                      })}
+                    </Grid>
+                  )}
+>>>>>>> Stashed changes
                 </CardContent>
                 <CardActions>
                   <Button 
@@ -203,7 +255,7 @@ export default class extends Component {
                   </Button>
                 </CardActions>
               </Card>
-            }
+            )}
           </Grid>
         ) : (
           <Redirect to="/" />
