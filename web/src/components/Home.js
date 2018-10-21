@@ -20,6 +20,11 @@ class Home extends Component {
 
   onPostChange = e => {
     this.setState({ post: e.target.value });
+    if (e.target.value.includes('twitter')) {
+      this.setState({ platform: 'twitter' });
+    } else if (!e.target.value.length) {
+      this.setState({ platform: '' });
+    }
   };
 
   onPlatformChange = e => {
