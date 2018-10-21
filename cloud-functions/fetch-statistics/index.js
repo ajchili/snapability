@@ -12,10 +12,7 @@ exports.fetchStatistics = (req, res) => {
     if (req.method !== 'GET') {
       res.status(405).send('Method must be GET!');
     } else {
-      const query = datastore
-        .createQuery('Parse');
-
-      datastore.runQuery(query)
+      Promise.all([datastore.runQuery(datastore.createQuery('Parse')), datastore.runQuery(datastore.createQuery('Predict'))])
         .then(results => {
           res.status(200).json(results);
         })

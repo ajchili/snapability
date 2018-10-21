@@ -13,7 +13,7 @@ import Chart from "react-apexcharts";
 
 class Stats extends Component {
   state = {
-    statistics: null,
+    postStatistics: null,
     err: null
   };
 
@@ -29,7 +29,7 @@ class Stats extends Component {
     axios.get('https://us-central1-snapability-220017.cloudfunctions.net/fetchStatistics')
       .then(res => {
         this.setState({
-          statistics: res.data[0]
+          postStatistics: res.data[0][0]
         });
       })
       .catch(err => {
@@ -42,8 +42,8 @@ class Stats extends Component {
 
   render() {
     let totalPlatformUsage = [0, 0, 0];
-    if (this.state.statistics) {
-      this.state.statistics.forEach(statistic => {
+    if (this.state.postStatistics) {
+      this.state.postStatistics.forEach(statistic => {
         switch (statistic.type) {
           case "twitter":
             totalPlatformUsage[0]++;
@@ -69,29 +69,24 @@ class Stats extends Component {
       name: 'Instagram',
       data: new Array(usagePerMinuteHistory).fill(0)
     }];
-    if (this.state.statistics) {
-      this.state.statistics.forEach(statistic => {
+    if (this.state.postStatistics) {
+      this.state.postStatistics.forEach(statistic => {
         let usage = Math.floor((new Date().getTime() - statistic.time) / 1000 / 60);
-        console.log(usage);
-        switch (statistic.type) {
-          case "twitter":
-            if (usage <= usagePerMinuteHistory - 1) {
-              if (!usagePerMinute[0].data[usage]) usagePerMinute[0].data[usage] = 0; 
-              usagePerMinute[0].data[usage]++;
-            }
-            break;
-          case "tumblr":
-            if (usage <= usagePerMinuteHistory - 1) {
-              if (!usagePerMinute[1].data[usage]) usagePerMinute[1].data[usage] = 0; 
-              usagePerMinute[1].data[usage]++;
-            }
-            break;
-          case "instagram":
-            if (usage <= usagePerMinuteHistory - 1) {
-              if (!usagePerMinute[2].data[usage]) usagePerMinute[2].data[usage] = 0; 
-              usagePerMinute[2].data[usage]++;
-            }
-            break;
+        if (usage <= usagePerMinuteHistory - 1) {
+          switch (statistic.type) {
+            case "twitter":
+                if (!usagePerMinute[0].data[usage]) usagePerMinute[0].data[usage] = 0; 
+                usagePerMinute[0].data[usage]++;
+              break;
+            case "tumblr":
+                if (!usagePerMinute[1].data[usage]) usagePerMinute[1].data[usage] = 0; 
+                usagePerMinute[1].data[usage]++;
+              break;
+            case "instagram":
+                if (!usagePerMinute[2].data[usage]) usagePerMinute[2].data[usage] = 0; 
+                usagePerMinute[2].data[usage]++;
+              break;
+          }
         }
       });
 
@@ -164,7 +159,7 @@ class Stats extends Component {
           }}
         >
         <Grid item l={4} m={6} xs={8} sm={10}>
-          {this.state.statistics ? (
+          {this.state.postStatistics ? (
             <Grid
               container
               direction="column"
@@ -214,7 +209,7 @@ class Stats extends Component {
               {this.state.err ? (
               <Grid item>
                 <Typography variant="display1">
-                  There was an error loading this post :(
+                  There was an error loading this data :(
                 </Typography>
                 <Typography variant="display4">
                   Please refresh the page or try again later
