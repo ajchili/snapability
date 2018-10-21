@@ -1,5 +1,5 @@
 const Clarifai = require('clarifai');
-const cors = require('cors');
+const cors = require('cors')({ origin: true });
 
 exports.predictImage = (req, res) => {
   cors(req, res, () => {
@@ -12,7 +12,7 @@ exports.predictImage = (req, res) => {
         apiKey: process.env.CLARIFAI_API_KEY
       });
   
-      app.models.initModel({id: Clarifai.GENERAL_MODEL, version: "aa7f35c01e0642fda5cf400f543e7c40"})
+      app.models.initModel({id: Clarifai.GENERAL_MODEL, version: "aa9ca48295b37401f8af92ad1af0d91d"})
         .then(generalModel => {
           return generalModel.predict(req.body.url);
         })

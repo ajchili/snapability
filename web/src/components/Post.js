@@ -33,6 +33,18 @@ export default class extends Component {
       });
   }
 
+  _fetchContent = url => {
+    axios({
+      method: 'POST',
+      url: 'https://us-central1-snapability-220017.cloudfunctions.net/predictImage',
+      data: {
+        url
+      }
+    })
+      .then(res => console.log(res))
+      .catch(err => console.error(err));
+  }
+
   render() {
     let type = this.props.match.params.type;
     let url = null;
@@ -50,6 +62,10 @@ export default class extends Component {
         default:
           break;
       }
+    }
+
+    if (!!this.state.post) {
+      this._fetchContent(this.state.post.src);
     }
 
     return (
