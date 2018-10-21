@@ -7,6 +7,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  CircularProgress,
   Chip,
   Typography
 } from '@material-ui/core';
@@ -100,22 +101,41 @@ export default class extends Component {
           <Grid item m={4} xs={4} sm={4}>
             {this.state.post && 
               <Card>
-                <CardMedia
-                  image={this.state.post.src}
-                  title="Contemplative Reptile"
-                  style={{
-                    height: '400px',
-                    width: '100%'
-                  }}
-                />
+                {this.state.post ? (
+                  <CardMedia
+                    image={this.state.post.src}
+                    title={`${type} post provided by user`}
+                    style={{
+                      height: '400px',
+                      width: '100%'
+                    }}
+                  />
+                ) : (
+                  <Grid
+                    container
+                    direction="column"
+                    justify="center"
+                    alignItems="center"
+                    spacing={8}
+                    style={{
+                      marginTop: '5px'
+                    }}
+                  >
+                    <Grid item>
+                      <CircularProgress />
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="caption">
+                        Loading image...
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                )}
                 <CardContent>
                   <Typography gutterBottom variant="headline" component="h2">
                     {type.substring(0, 1).toUpperCase()}{type.substring(1)} Post
                   </Typography>
-                  <Typography variant="caption">
-                    <a href={url} target="_blank">Original Post</a>
-                  </Typography>
-                  {this.state.content && 
+                  {this.state.content ? (
                     <Grid
                       container
                       direction="row"
@@ -137,19 +157,47 @@ export default class extends Component {
                                 <Chip label={content.name} variant="outlined" color="primary"/>
                               }
                               {content.value < .9 && content.value >= .7 &&
-                                <Chip label={content.name} variant="outlined" color="secondary"/>
+                                <Chip label={content.name} variant="outlined"/>
                               }
                               {content.value < .7 &&
-                                <Chip label={content.name} variant="outlined"/>
+                                <Chip label={content.name} variant="outlined" color="secondary"/>
                               }
                             </Grid>
                           );
                         })
                       }
                     </Grid>
+                    ) : (
+                      <Grid
+                        container
+                        direction="column"
+                        justify="center"
+                        alignItems="center"
+                        spacing={8}
+                        style={{
+                          marginTop: '5px'
+                        }}
+                      >
+                        <Grid item>
+                          <CircularProgress />
+                        </Grid>
+                        <Grid item>
+                          <Typography variant="caption">
+                            Loading descriptions...
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    )
                   }
                 </CardContent>
                 <CardActions>
+                  <Button 
+                    size="small"
+                    color="primary"
+                    onClick={() => window.open(url, '_blank')}
+                  >
+                    Original Post
+                  </Button>
                   <Button size="small" color="primary">
                     Share
                   </Button>
