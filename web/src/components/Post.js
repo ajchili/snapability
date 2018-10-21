@@ -15,7 +15,8 @@ import { Redirect } from 'react-router-dom';
 
 const allowedTypes = [
   'twitter',
-  'tumblr'
+  'tumblr',
+  'instagram'
 ];
 
 export default class extends Component {
@@ -59,7 +60,29 @@ export default class extends Component {
       }
     })
       .then(res => {
-        console.log(res);
+        this.setState({
+          post: res.data
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        this.setState({
+          err: 'Error parsing tumblr post.'
+        });
+      });
+  }
+
+  _fetchInstagramPost = post => {
+    if (this.state.err || this.state.post) return;
+    
+    axios({
+      method: 'POST',
+      url: 'https://us-central1-snapability-220017.cloudfunctions.net/parseInstagramPost',
+      data: {
+        url: `https://www.instagram.com/p/${post}`
+      }
+    })
+      .then(res => {
         this.setState({
           post: res.data
         });
@@ -118,6 +141,13 @@ export default class extends Component {
             return (<Redirect to="/" />);
           }
           break;
+        case 'instagram':
+          postId = this.props.location.search.split('post=')[1];
+          if (postId) {
+            this._fetchInstagramPost(postId);
+          } else {
+            return (<Redirect to="/" />);
+          }
         default:
           break;
       }

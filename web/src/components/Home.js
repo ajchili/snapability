@@ -24,6 +24,8 @@ class Home extends Component {
       this.setState({ platform: 'twitter' });
     } else if (e.target.value.includes('tumblr')) {
       this.setState({ platform: 'tumblr' });
+    } else if (e.target.value.includes('instagram')) {
+      this.setState({ platform: 'instagram' })
     } else if (!e.target.value.length) {
       this.setState({ platform: '' });
     }
@@ -51,6 +53,11 @@ class Home extends Component {
           if (_post.includes('/')) _post = _post.split('/')[0];
           this.props.history.push(`/post/tumblr?author=${author}&?post=${_post}`);
           break;
+        case "instagram":
+          _post = post.split('/p/')[1];
+          if (_post.includes('/')) _post = _post.split('/')[0];
+          this.props.history.push(`/post/instagram?post=${_post}`);
+          break;
         default:
           alert('The platform selected is currently unsupported.');
           break;
@@ -66,7 +73,8 @@ class Home extends Component {
         justify="center"
         alignItems="center"
         style={{
-          height: "100vh"
+          height: "100vh",
+          overflowX: "hidden"
         }}
       >
         <Grid
