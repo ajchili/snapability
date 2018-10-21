@@ -1,0 +1,25 @@
+{
+  "name": "snapability-parse-instagram-post",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "gcloud functions deploy parseInstagramPost --runtime nodejs8 --trigger-http",
+    "describe": "gcloud functions describe parseInstagramPost",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajchili/snapability.git"
+  },
+  "author": "elijahcutler",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ajchili/snapability/issues"
+  },
+  "homepage": "https://github.com/ajchili/snapability#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "cors": "^2.8.4"
+  }
+}
