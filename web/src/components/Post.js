@@ -192,20 +192,16 @@ class Post extends Component {
           }}
         >
           {type ? (
-            <Grid item m={4} xs={4} sm={4}>
-              {this.state.post && (
+            <Grid item l={4} m={6} xs={8} sm={10}>
+              {this.state.post ? ( 
                 <Card>
                   {this.state.post ? (
                     <CardMedia
-                      image={
-                        type !== "tumblr"
-                          ? this.state.post.src
-                          : this.state.post[0]
-                      }
+                      image={type !== 'tumblr' ? this.state.post.src : this.state.post[0]}
                       title={`${type} post provided by user`}
                       style={{
-                        height: "400px",
-                        width: "100%"
+                        height: '400px',
+                        width: '100%'
                       }}
                     />
                   ) : (
@@ -216,7 +212,7 @@ class Post extends Component {
                       alignItems="center"
                       spacing={8}
                       style={{
-                        marginTop: "5px"
+                        marginTop: '5px'
                       }}
                     >
                       <Grid item>
@@ -229,77 +225,78 @@ class Post extends Component {
                       </Grid>
                     </Grid>
                   )}
-                  <CardContent>
-                    <Typography gutterBottom variant="headline" component="h2">
-                      {type.substring(0, 1).toUpperCase()}
-                      {type.substring(1)} Post
-                    </Typography>
-                    {this.state.content ? (
-                      <Grid
-                        container
-                        direction="row"
-                        justify="flex-start"
-                        alignItems="center"
-                        spacing={8}
-                        style={{
-                          marginTop: "5px"
-                        }}
-                      >
-                        {this.state.content.map(content => {
-                          return (
-                            <Grid item key={content.name}>
-                              {content.value >= 0.9 && (
-                                <Chip
-                                  label={content.name}
-                                  variant="outlined"
-                                  color="primary"
-                                />
-                              )}
-                              {content.value < 0.9 &&
-                                content.value >= 0.7 && (
+                    <CardContent>
+                      <Typography gutterBottom variant="headline" component="h2">
+                        {type.substring(0, 1).toUpperCase()}
+                        {type.substring(1)} Post
+                      </Typography>
+                      {this.state.content ? (
+                        <Grid
+                          container
+                          direction="row"
+                          justify="flex-start"
+                          alignItems="center"
+                          spacing={8}
+                          style={{
+                            marginTop: "5px"
+                          }}
+                        >
+                          {this.state.content.map(content => {
+                            return (
+                              <Grid item key={content.name}>
+                                {content.value >= 0.9 && (
                                   <Chip
                                     label={content.name}
                                     variant="outlined"
+                                    color="primary"
                                   />
                                 )}
-                              {content.value < 0.7 && (
-                                <Chip
-                                  label={content.name}
-                                  variant="outlined"
-                                  color="secondary"
-                                />
-                              )}
-                            </Grid>
-                          );
-                        })}
-                      </Grid>
-                    ) : (
-                      <Grid
-                        container
-                        direction="column"
-                        justify="center"
-                        alignItems="center"
-                        spacing={8}
-                        style={{
-                          marginTop: "5px"
-                        }}
-                      >
-                        <Grid item>
-                          <CircularProgress />
+                                {content.value < 0.9 &&
+                                  content.value >= 0.7 && (
+                                    <Chip
+                                      label={content.name}
+                                      variant="outlined"
+                                    />
+                                  )}
+                                {content.value < 0.7 && (
+                                  <Chip
+                                    label={content.name}
+                                    variant="outlined"
+                                    color="secondary"
+                                  />
+                                )}
+                              </Grid>
+                            );
+                          })}
                         </Grid>
-                        <Grid item>
-                          <Typography variant="caption">
-                            Loading descriptions...
-                          </Typography>
+                      ) : (
+                        <Grid
+                          container
+                          direction="column"
+                          justify="center"
+                          alignItems="center"
+                          spacing={8}
+                          style={{
+                            marginTop: "5px"
+                          }}
+                        >
+                          <Grid item>
+                            <CircularProgress />
+                          </Grid>
+                          <Grid item>
+                            <Typography variant="caption">
+                              Loading descriptions...
+                            </Typography>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    )}
-                  </CardContent>
+                      )
+                    }
+                    </CardContent>
                   <CardActions>
-                    <Button
+                    <Button 
                       size="small"
                       color="primary"
-                      onClick={() => window.open(url, "_blank")}
+                      onClick={() => window.open(url, '_blank')}
                     >
                       Original Post
                     </Button>
@@ -308,6 +305,32 @@ class Post extends Component {
                     </Button>
                   </CardActions>
                 </Card>
+              ) : (
+                <Grid
+                  container
+                  direction="column"
+                  justify="center"
+                  alignItems="center"
+                  spacing={8}
+                  style={{
+                    marginTop: '5px'
+                  }}
+                >
+                  {this.state.err ? (
+                  <Grid item>
+                    <Typography variant="display1">
+                      There was an error loading this post :(
+                    </Typography>
+                    <Typography variant="display4">
+                      Please refresh the page or try again later
+                    </Typography>
+                  </Grid>
+                  ) : (
+                    <Grid item>
+                      <CircularProgress size={150} />
+                    </Grid>
+                  )}
+                </Grid>
               )}
             </Grid>
           ) : (
