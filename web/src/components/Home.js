@@ -31,7 +31,16 @@ const demo = [
   "https://twitter.com/localgringo/status/923198119784931328",
   "https://twitter.com/DaisyOfNland/status/1053923167197192192",
   "https://twitter.com/UNC_Basketball/status/1053350300801818626",
-  "https://twitter.com/selfcareviibess/status/1053946313606381574"
+  "https://twitter.com/selfcareviibess/status/1053946313606381574",
+  "https://www.instagram.com/p/BncJVbhlpts/?taken-by=gunnerstahl.us",
+  "https://www.instagram.com/p/Bn32gjHg67w/?taken-by=kreayshawn",
+  "https://www.instagram.com/p/Bn4GC3oFhVO/?taken-by=classifiedg",
+  "https://www.instagram.com/p/BpG1o-TgOQs/?taken-by=oscardona",
+  "https://www.instagram.com/p/BpIvk7ZBs2x/?explore=true",
+  "http://hifructosemag.tumblr.com/post/179249193402/magnhild-kennedy-the-norwegian-artist-also-known",
+  "https://imoutsidelookingin.tumblr.com/post/179274828040/cynthia-harper",
+  "http://beakersblog.tumblr.com/post/179272841989",
+  "http://scientificillustration.tumblr.com/post/179263990890/humanoidhistory-soviet-space-art-by-andrei"
 ];
 
 class Home extends Component {
@@ -103,7 +112,7 @@ class Home extends Component {
           }}
           variant="text"
           color="primary"
-          onClick={() => this.props.history.push('/stats')}
+          onClick={() => this.props.history.push("/stats")}
         >
           Statistics
         </Button>
