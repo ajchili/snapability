@@ -10,16 +10,12 @@ import {
   CircularProgress,
   Chip,
   Typography
-} from '@material-ui/core';
-import { Redirect } from 'react-router-dom';
+} from "@material-ui/core";
+import { Redirect, withRouter } from "react-router-dom";
 
-const allowedTypes = [
-  'twitter',
-  'tumblr',
-  'instagram'
-];
+const allowedTypes = ["twitter", "tumblr", "instagram"];
 
-export default class extends Component {
+class Post extends Component {
   state = {
     post: null,
     err: null,
@@ -30,8 +26,9 @@ export default class extends Component {
     if (this.state.err || this.state.post) return;
 
     axios({
-      method: 'POST',
-      url: 'https://us-central1-snapability-220017.cloudfunctions.net/parseTwitterPost',
+      method: "POST",
+      url:
+        "https://us-central1-snapability-220017.cloudfunctions.net/parseTwitterPost",
       data: {
         url
       }
@@ -43,17 +40,18 @@ export default class extends Component {
       })
       .catch(() => {
         this.setState({
-          err: 'Error parsing tweet.'
+          err: "Error parsing tweet."
         });
       });
-  }
+  };
 
   _fetchPost = (username, postId) => {
     if (this.state.err || this.state.post) return;
-    
+
     axios({
-      method: 'POST',
-      url: 'https://us-central1-snapability-220017.cloudfunctions.net/parseTumblrPost',
+      method: "POST",
+      url:
+        "https://us-central1-snapability-220017.cloudfunctions.net/parseTumblrPost",
       data: {
         username,
         postId
@@ -67,17 +65,18 @@ export default class extends Component {
       .catch(err => {
         console.error(err);
         this.setState({
-          err: 'Error parsing tumblr post.'
+          err: "Error parsing tumblr post."
         });
       });
-  }
+  };
 
   _fetchInstagramPost = post => {
     if (this.state.err || this.state.post) return;
-    
+
     axios({
-      method: 'POST',
-      url: 'https://us-central1-snapability-220017.cloudfunctions.net/parseInstagramPost',
+      method: "POST",
+      url:
+        "https://us-central1-snapability-220017.cloudfunctions.net/parseInstagramPost",
       data: {
         url: `https://www.instagram.com/p/${post}`
       }
@@ -90,17 +89,18 @@ export default class extends Component {
       .catch(err => {
         console.error(err);
         this.setState({
-          err: 'Error parsing tumblr post.'
+          err: "Error parsing tumblr post."
         });
       });
-  }
+  };
 
   _fetchContent = url => {
     if (this.state.content) return;
 
     axios({
-      method: 'POST',
-      url: 'https://us-central1-snapability-220017.cloudfunctions.net/predictImage',
+      method: "POST",
+      url:
+        "https://us-central1-snapability-220017.cloudfunctions.net/predictImage",
       data: {
         url
       }
@@ -111,7 +111,7 @@ export default class extends Component {
         });
       })
       .catch(err => console.error(err));
-  }
+  };
 
   render() {
     let type = this.props.match.params.type;
@@ -121,32 +121,36 @@ export default class extends Component {
       let author, status, username, postId;
 
       switch (type) {
-        case 'twitter':
-          author = this.props.location.search.split('author=')[1];
-          status = this.props.location.search.split('status=')[1];
+        case "twitter":
+          author = this.props.location.search.split("author=")[1];
+          status = this.props.location.search.split("status=")[1];
           if (author && status) {
-            url = `https://twitter.com/${author.split('&')[0]}/status/${status}`;
+            url = `https://twitter.com/${
+              author.split("&")[0]
+            }/status/${status}`;
             this._fetchTweet(url);
           } else {
-            return (<Redirect to="/" />);
+            return <Redirect to="/" />;
           }
           break;
-        case 'tumblr':
-          username = this.props.location.search.split('author=')[1].split('&')[0];
-          postId = this.props.location.search.split('post=')[1];
-          url = `https://${username}/post/${postId}`
+        case "tumblr":
+          username = this.props.location.search
+            .split("author=")[1]
+            .split("&")[0];
+          postId = this.props.location.search.split("post=")[1];
+          url = `https://${username}/post/${postId}`;
           if (username && postId) {
             this._fetchPost(username, postId);
           } else {
-            return (<Redirect to="/" />);
+            return <Redirect to="/" />;
           }
           break;
-        case 'instagram':
-          postId = this.props.location.search.split('post=')[1];
+        case "instagram":
+          postId = this.props.location.search.split("post=")[1];
           if (postId) {
             this._fetchInstagramPost(postId);
           } else {
-            return (<Redirect to="/" />);
+            return <Redirect to="/" />;
           }
           break;
         default:
@@ -155,7 +159,7 @@ export default class extends Component {
     }
 
     if (!!this.state.post) {
-      if (type !== 'tumblr') {
+      if (type !== "tumblr") {
         this._fetchContent(this.state.post.src);
       } else {
         this.state.post.forEach(src => {
@@ -165,85 +169,110 @@ export default class extends Component {
     }
 
     return (
-      <Grid
-        container
-        direction="row"
-        justify="center"
-        alignItems="center"
-        style={{
-          height: "100vh"
-        }}
-      >
-        {type ? (
-          <Grid item m={4} xs={4} sm={4}>
-            {this.state.post && 
-              <Card>
-                {this.state.post ? (
-                  <CardMedia
-                    image={type !== 'tumblr' ? this.state.post.src : this.state.post[0]}
-                    title={`${type} post provided by user`}
-                    style={{
-                      height: '400px',
-                      width: '100%'
-                    }}
-                  />
-                ) : (
-                  <Grid
-                    container
-                    direction="column"
-                    justify="center"
-                    alignItems="center"
-                    spacing={8}
-                    style={{
-                      marginTop: '5px'
-                    }}
-                  >
-                    <Grid item>
-                      <CircularProgress />
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="caption">
-                        Loading image...
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                )}
-                <CardContent>
-                  <Typography gutterBottom variant="headline" component="h2">
-                    {type.substring(0, 1).toUpperCase()}{type.substring(1)} Post
-                  </Typography>
-                  {this.state.content ? (
+      <div>
+        <Button
+          style={{
+            top: 5,
+            left: 5,
+            position: "absolute"
+          }}
+          variant="text"
+          color="primary"
+          onClick={() => this.props.history.push("/")}
+        >
+          Back
+        </Button>
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+          style={{
+            height: "100vh"
+          }}
+        >
+          {type ? (
+            <Grid item m={4} xs={4} sm={4}>
+              {this.state.post && (
+                <Card>
+                  {this.state.post ? (
+                    <CardMedia
+                      image={
+                        type !== "tumblr"
+                          ? this.state.post.src
+                          : this.state.post[0]
+                      }
+                      title={`${type} post provided by user`}
+                      style={{
+                        height: "400px",
+                        width: "100%"
+                      }}
+                    />
+                  ) : (
                     <Grid
                       container
-                      direction="row"
-                      justify="flex-start"
+                      direction="column"
+                      justify="center"
                       alignItems="center"
                       spacing={8}
                       style={{
-                        marginTop: '5px'
+                        marginTop: "5px"
                       }}
                     >
-                      {this.state.content
-                        .map(content => {
+                      <Grid item>
+                        <CircularProgress />
+                      </Grid>
+                      <Grid item>
+                        <Typography variant="caption">
+                          Loading image...
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  )}
+                  <CardContent>
+                    <Typography gutterBottom variant="headline" component="h2">
+                      {type.substring(0, 1).toUpperCase()}
+                      {type.substring(1)} Post
+                    </Typography>
+                    {this.state.content ? (
+                      <Grid
+                        container
+                        direction="row"
+                        justify="flex-start"
+                        alignItems="center"
+                        spacing={8}
+                        style={{
+                          marginTop: "5px"
+                        }}
+                      >
+                        {this.state.content.map(content => {
                           return (
-                            <Grid
-                              item
-                              key={content.name}
-                            >
-                              {content.value >= .9 &&
-                                <Chip label={content.name} variant="outlined" color="primary"/>
-                              }
-                              {content.value < .9 && content.value >= .7 &&
-                                <Chip label={content.name} variant="outlined"/>
-                              }
-                              {content.value < .7 &&
-                                <Chip label={content.name} variant="outlined" color="secondary"/>
-                              }
+                            <Grid item key={content.name}>
+                              {content.value >= 0.9 && (
+                                <Chip
+                                  label={content.name}
+                                  variant="outlined"
+                                  color="primary"
+                                />
+                              )}
+                              {content.value < 0.9 &&
+                                content.value >= 0.7 && (
+                                  <Chip
+                                    label={content.name}
+                                    variant="outlined"
+                                  />
+                                )}
+                              {content.value < 0.7 && (
+                                <Chip
+                                  label={content.name}
+                                  variant="outlined"
+                                  color="secondary"
+                                />
+                              )}
                             </Grid>
                           );
-                        })
-                      }
-                    </Grid>
+                        })}
+                      </Grid>
                     ) : (
                       <Grid
                         container
@@ -252,7 +281,7 @@ export default class extends Component {
                         alignItems="center"
                         spacing={8}
                         style={{
-                          marginTop: '5px'
+                          marginTop: "5px"
                         }}
                       >
                         <Grid item>
@@ -264,28 +293,30 @@ export default class extends Component {
                           </Typography>
                         </Grid>
                       </Grid>
-                    )
-                  }
-                </CardContent>
-                <CardActions>
-                  <Button 
-                    size="small"
-                    color="primary"
-                    onClick={() => window.open(url, '_blank')}
-                  >
-                    Original Post
-                  </Button>
-                  <Button size="small" color="primary">
-                    Share
-                  </Button>
-                </CardActions>
-              </Card>
-            }
-          </Grid>
-        ) : (
-          <Redirect to="/" />
-        )}
-      </Grid>
+                    )}
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size="small"
+                      color="primary"
+                      onClick={() => window.open(url, "_blank")}
+                    >
+                      Original Post
+                    </Button>
+                    <Button size="small" color="primary">
+                      Share
+                    </Button>
+                  </CardActions>
+                </Card>
+              )}
+            </Grid>
+          ) : (
+            <Redirect to="/" />
+          )}
+        </Grid>
+      </div>
     );
   }
 }
+
+export default withRouter(Post);
